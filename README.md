@@ -1,5 +1,7 @@
 # 6.5.10 Lab Explore the Evolution of Password Methods
 
+[Link to the video demonstration](https://youtu.be/xluLvV_PY5Q)
+
 ## Objectives
 - Launch the DEVASC VM
 - Explore Python Code Storing Passwords in Plain Text
