@@ -186,26 +186,31 @@ Note: After each command, press Enter to get a command prompt on a new line.
 ```sh
 curl -k -X POST -F 'username=alice' -F 'password=myalicepassword'  'https://0.0.0.0:5000/signup/v1'
 ```
-** signup successdevasc@labvm:~/labs/devnet-src/security$ **
+```
+signup successdevasc@labvm:~/labs/devnet-src/security$
+```
 
 ```sh
 curl -k -X POST -F 'username=bob' -F 'password=passwordforbob'  'https://0.0.0.0:5000/signup/v1'
 ```
-** signup successdevasc@labvm:~/labs/devnet-src/security$ **
-
+```
+signup successdevasc@labvm:~/labs/devnet-src/security$
+```
 
 ##### Step 4: Verify your new users can login.
 - a.	Use the following curl commands to verify that both users can login with their passwords that are stored in plaintext.
 ```sh
 curl -k -X POST -F 'username=alice' -F 'password=myalicepassword' 'https://0.0.0.0:5000/login/v1'
 ```
-** login successdevasc@labvm:~/labs/devnet-src/security$ **
-
+```
+login successdevasc@labvm:~/labs/devnet-src/security$
+```
 ```sh
 curl -k -X POST -F 'username=bob' -F 'password=passwordforbob' 'https://0.0.0.0:5000/login/v1'
 ```
-** login successdevasc@labvm:~/labs/devnet-src/security$ **
-
+```
+login successdevasc@labvm:~/labs/devnet-src/security$
+```
 - b.	Terminate the server.
 ```sh
 pkill -f password-evolution.py
