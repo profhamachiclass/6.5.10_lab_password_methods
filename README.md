@@ -36,7 +36,7 @@ In this Part, you will use Flask to create a simple web service that requires us
 ```sh
 pip3 install pyotp
 ```
-```
+
 Defaulting to user installation because normal site-packages is not writeable
 Collecting pyotp
   Using cached pyotp-2.3.0-py2.py3-none-any.whl (10 kB)
@@ -53,7 +53,7 @@ Requirement already satisfied: Werkzeug>=0.15 in /home/devasc/.local/lib/python3
 Installing collected packages: flask
 Successfully installed flask-1.1.2
 devasc@labvm:~/labs/devnet-src/security$
-```
+
 ##### Step 2: Import libraries.
 In the **password-evolution.py** file, add the following code. Notice the command, db_name = 'test.db'. This is an SQL database (sqlite3) that stores the usernames and passwords that you will be creating.
 
