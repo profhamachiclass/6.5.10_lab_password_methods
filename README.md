@@ -87,11 +87,11 @@ if __name__ == '__main__':
 ```sh
 nohup python3 password-evolution.py &
 ```
-
+```
 [1] 26329
 devasc@labvm:~/labs/devnet-src/security$ nohup: ignoring input and appending output to 'nohup.out'
 devasc@labvm:~/labs/devnet-src/security$
-
+```
 
 - d.	Press Enter to get a new command prompt. 
 - e.	Your Flask server is now running. In VS Code in the /security folder, you should see the nohup.out text file created by Flask. Click the file to read its output.
@@ -210,9 +210,10 @@ curl -k -X POST -F 'username=bob' -F 'password=passwordforbob' 'https://0.0.0.0:
 ```sh
 pkill -f password-evolution.py
 ```
+```
 [1]+  Terminated              nohup python3 password-evolution.py
 devasc@labvm:~/labs/devnet-src/security$
-
+```
 ##### Step 5: Verify the contents of test.db.
 You may have noticed that SQLite created a test.db file in your /security folder. You can cat this file and see the username and passwords for alice and bob. However, in this step you will use an application for viewing SQLite database files. 
 - a.	Open the DB Browser for SQLite application
@@ -299,53 +300,63 @@ if __name__ == '__main__':
 ```sh
 nohup python3 password-evolution.py &
 ```
+```
 [1] 28411
 devasc@labvm:~/labs/devnet-src/security$ nohup: ignoring input and appending output to 'nohup.out'
-
+```
 - c.	Use the following curl commands to create three new user accounts with a hashed password. Notice that two of the users, rick and allan, are using the same password.
 ```sh
 curl -k -X POST -F 'username=rick' -F 'password=samepassword' 'https://0.0.0.0:5000/signup/v2'
 ```
-** signup successdevasc@labvm:~/labs/devnet-src/security$ **
+```
+signup successdevasc@labvm:~/labs/devnet-src/security$
+```
 ```sh
 curl -k -X POST -F 'username=allan' -F 'password=samepassword' 'https://0.0.0.0:5000/signup/v2'
 ```
+```
 signup successdevasc@labvm:~/labs/devnet-src/security$
-
+```
 ```sh
 curl -k -X POST -F 'username=dave' -F 'password=differentpassword' 'https://0.0.0.0:5000/signup/v2'
 ```
+```
 signup successdevasc@labvm:~/labs/devnet-src/security$
-
+```
 - d.	Use curl commands to verify the login of all three users with their hash-stored passwords. The user allan is entered in twice, the first time with the wrong password. Notice the "Invalid username/password" that coincides with the code for this function that you added in a previous step. 
 ```sh
 curl -k -X POST -F 'username=rick' -F 'password=samepassword' 'https://0.0.0.0:5000/login/v2'
 ```
+```
 login successdevasc@labvm:~/labs/devnet-src/security$
-
+```
 ```sh
 curl -k -X POST -F 'username=allan' -F 'password=wrongpassword' 'https://0.0.0.0:5000/login/v2'
 ```
+```
 Invalid username/passworddevasc@labvm:~/labs/devnet-src/security$
-
+```
 ```sh
 curl -k -X POST -F 'username=allan' -F 'password=samepassword' 'https://0.0.0.0:5000/login/v2'
 ```
+```
 login successdevasc@labvm:~/labs/devnet-src/security$
-
+```
 ```sh
 curl -k -X POST -F 'username=dave' -F 'password=differentpassword' 'https://0.0.0.0:5000/login/v2'
 ```
+```
 login successdevasc@labvm:~/labs/devnet-src/security$
-
+```
 This confirms that the hashed password is safely stored, and the passwords of users are protected should they become compromised.
 - e.	Terminate the server.
 ```sh
 pkill -f password-evolution.py
 ```
+```
 [1]+  Terminated              nohup python3 password-evolution.py
 devasc@labvm:~/labs/devnet-src/security$
-
+```
 ##### Step 4: Verify the contents of test.db.
 - a.	Open the DB Browser for SQLite application.
 - b.	Open the test.db file.
