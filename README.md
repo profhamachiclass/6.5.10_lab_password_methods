@@ -175,7 +175,7 @@ if __name__ == '__main__':
 ```
 - b.	Save and run the script to start the updated web service.
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ nohup python3 password-evolution.py &
+nohup python3 password-evolution.py &
 ```
 ```
 [1] 27826
@@ -186,25 +186,26 @@ Note: After each command, press Enter to get a command prompt on a new line.
 ```sh
 curl -k -X POST -F 'username=alice' -F 'password=myalicepassword'  'https://0.0.0.0:5000/signup/v1'
 ```
-signup successdevasc@labvm:~/labs/devnet-src/security$
+** signup successdevasc@labvm:~/labs/devnet-src/security$ **
 
 ```sh
 curl -k -X POST -F 'username=bob' -F 'password=passwordforbob'  'https://0.0.0.0:5000/signup/v1'
 ```
-signup successdevasc@labvm:~/labs/devnet-src/security$
-devasc@labvm:~/labs/devnet-src/security$
+** signup successdevasc@labvm:~/labs/devnet-src/security$ **
+
 
 ##### Step 4: Verify your new users can login.
 - a.	Use the following curl commands to verify that both users can login with their passwords that are stored in plaintext.
 ```sh
 curl -k -X POST -F 'username=alice' -F 'password=myalicepassword' 'https://0.0.0.0:5000/login/v1'
 ```
-login successdevasc@labvm:~/labs/devnet-src/security$
+** login successdevasc@labvm:~/labs/devnet-src/security$ **
 
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ curl -k -X POST -F 'username=bob' -F 'password=passwordforbob' 'https://0.0.0.0:5000/login/v1'
-login successdevasc@labvm:~/labs/devnet-src/security$
+curl -k -X POST -F 'username=bob' -F 'password=passwordforbob' 'https://0.0.0.0:5000/login/v1'
 ```
+** login successdevasc@labvm:~/labs/devnet-src/security$ **
+
 - b.	Terminate the server.
 ```sh
 pkill -f password-evolution.py
@@ -305,7 +306,7 @@ devasc@labvm:~/labs/devnet-src/security$ nohup: ignoring input and appending out
 ```sh
 curl -k -X POST -F 'username=rick' -F 'password=samepassword' 'https://0.0.0.0:5000/signup/v2'
 ```
-signup successdevasc@labvm:~/labs/devnet-src/security$
+** signup successdevasc@labvm:~/labs/devnet-src/security$ **
 ```sh
 curl -k -X POST -F 'username=allan' -F 'password=samepassword' 'https://0.0.0.0:5000/signup/v2'
 ```
