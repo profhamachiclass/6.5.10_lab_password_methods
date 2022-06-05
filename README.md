@@ -34,7 +34,7 @@ In this Part, you will use Flask to create a simple web service that requires us
 - d.	Use the following commands to install the packages needed in this lab. These packages may already be installed on your VM. If so, you will get a Requirement already satisfied message.
 
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ pip3 install pyotp
+pip3 install pyotp
 ```
 ```
 Defaulting to user installation because normal site-packages is not writeable
@@ -85,28 +85,28 @@ if __name__ == '__main__':
 - c.	Save and run the password-evolution.py file. The nohup (no hangup) command keeps the process running even after exiting the shell or terminal. The & makes the command run in the background.
 
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ nohup python3 password-evolution.py &
+nohup python3 password-evolution.py &
 ```
-```sh
+
 [1] 26329
 devasc@labvm:~/labs/devnet-src/security$ nohup: ignoring input and appending output to 'nohup.out'
-
 devasc@labvm:~/labs/devnet-src/security$
-```
+
+
 - d.	Press Enter to get a new command prompt. 
 - e.	Your Flask server is now running. In VS Code in the /security folder, you should see the nohup.out text file created by Flask. Click the file to read its output.
 - f.	Verify that the web service has started. Be sure to use HTTPS and not HTTP. The -k option allows curl to perform "insecure" SSL connections and transfers. Without the -k option, you will receive an error message, "SSL certificate problem: self-signed certificate". The command will display the message from the return command you coded in your script.
 
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ curl -k https://0.0.0.0:5000/
-Welcome to the hands-on lab for an evolution of password systems!devasc@labvm:~/labs/devnet-src/security$
+curl -k https://0.0.0.0:5000/
 ```
+Welcome to the hands-on lab for an evolution of password systems!devasc@labvm:~/labs/devnet-src/security$
+
 - g.	Press Enter to get a command prompt one a new line.
 - h.	Before continuing, terminate the script. Use the following command to stop it:
 
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ pkill -f password-evolution.py
-devasc@labvm:~/labs/devnet-src/security$
+pkill -f password-evolution.py
 ```
 #### Part 4: Explore Python Code Storing Passwords in Plain Text
 When passwords were first used, they were simply stored in a database as plaintext. When the user entered their credentials, the system looked up the password to see if it matched. The system was very easy to implement, but also very insecure. In this Part, you will modify the password-evolution.py python file to allow it to store user identity in the test.db database. You will then create a user and perform an authentication against these credentials. Finally, you will examine the test.db database to verify they were stored in plaintext.
@@ -184,35 +184,34 @@ devasc@labvm:~/labs/devnet-src/security$ nohup: ignoring input and appending out
 - c.	Use the following curl commands to create (signup) two user accounts, alice and bob, and send a POST to the web service. Each command includes the username, password, and the signup function being called that stores this information including the password as plaintext. You should see the "signup success" message from the return command that you included in the previous step.
 Note: After each command, press Enter to get a command prompt on a new line.
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ curl -k -X POST -F 'username=alice' -F 'password=myalicepassword'  'https://0.0.0.0:5000/signup/v1'
-```
+curl -k -X POST -F 'username=alice' -F 'password=myalicepassword'  'https://0.0.0.0:5000/signup/v1'
 ```
 signup successdevasc@labvm:~/labs/devnet-src/security$
-```
+
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ curl -k -X POST -F 'username=bob' -F 'password=passwordforbob'  'https://0.0.0.0:5000/signup/v1'
-```
+curl -k -X POST -F 'username=bob' -F 'password=passwordforbob'  'https://0.0.0.0:5000/signup/v1'
 ```
 signup successdevasc@labvm:~/labs/devnet-src/security$
 devasc@labvm:~/labs/devnet-src/security$
-```
 
 ##### Step 4: Verify your new users can login.
 - a.	Use the following curl commands to verify that both users can login with their passwords that are stored in plaintext.
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ curl -k -X POST -F 'username=alice' -F 'password=myalicepassword' 'https://0.0.0.0:5000/login/v1'
-login successdevasc@labvm:~/labs/devnet-src/security$
+curl -k -X POST -F 'username=alice' -F 'password=myalicepassword' 'https://0.0.0.0:5000/login/v1'
 ```
+login successdevasc@labvm:~/labs/devnet-src/security$
+
 ```sh
 devasc@labvm:~/labs/devnet-src/security$ curl -k -X POST -F 'username=bob' -F 'password=passwordforbob' 'https://0.0.0.0:5000/login/v1'
 login successdevasc@labvm:~/labs/devnet-src/security$
 ```
 - b.	Terminate the server.
 ```sh
-login successdevasc@labvm:~/labs/devnet-src/security$ pkill -f password-evolution.py
+pkill -f password-evolution.py
+```
 [1]+  Terminated              nohup python3 password-evolution.py
 devasc@labvm:~/labs/devnet-src/security$
-```
+
 ##### Step 5: Verify the contents of test.db.
 You may have noticed that SQLite created a test.db file in your /security folder. You can cat this file and see the username and passwords for alice and bob. However, in this step you will use an application for viewing SQLite database files. 
 - a.	Open the DB Browser for SQLite application
@@ -234,8 +233,11 @@ Instead of storing passwords in plaintext, you can hash it when it is created. W
 
 ##### Step 1: Remove the server configuration.
 - a.	Remove the following two lines from the password-evolution.py file. These lines will be appended again later.
+
+```python
 if __name__ == '__main__':
 app.run(host='0.0.0.0', port=5000, ssl_context='adhoc')
+```
 ##### Step 2: Configure the server to store credentials.
 - a.	Add the following code to the bottom of the file to enable the server to hash the password using SHA256 hashing method. Notice that this code is similar to the code you included previously. This code allows a user to create ("signup") a new username and password that will be stored in the test.db SQL database file. The difference is that the passwords will be stored as hash values instead of being in plaintext. This routine uses sha256 but does not salt the hash. You will see the implications of using a hash without salt when you view the test.db database file.
 ```python
@@ -294,49 +296,54 @@ if __name__ == '__main__':
 ```
 - b.	Save and then run the script to start the updated web service.
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ nohup python3 password-evolution.py &
+nohup python3 password-evolution.py &
 ```
-```[1] 28411
+[1] 28411
 devasc@labvm:~/labs/devnet-src/security$ nohup: ignoring input and appending output to 'nohup.out'
-```
+
 - c.	Use the following curl commands to create three new user accounts with a hashed password. Notice that two of the users, rick and allan, are using the same password.
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ curl -k -X POST -F 'username=rick' -F 'password=samepassword' 'https://0.0.0.0:5000/signup/v2'
-signup successdevasc@labvm:~/labs/devnet-src/security$
+curl -k -X POST -F 'username=rick' -F 'password=samepassword' 'https://0.0.0.0:5000/signup/v2'
 ```
+signup successdevasc@labvm:~/labs/devnet-src/security$
+```sh
+curl -k -X POST -F 'username=allan' -F 'password=samepassword' 'https://0.0.0.0:5000/signup/v2'
+```
+signup successdevasc@labvm:~/labs/devnet-src/security$
 
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ curl -k -X POST -F 'username=allan' -F 'password=samepassword' 'https://0.0.0.0:5000/signup/v2'
-signup successdevasc@labvm:~/labs/devnet-src/security$
+curl -k -X POST -F 'username=dave' -F 'password=differentpassword' 'https://0.0.0.0:5000/signup/v2'
 ```
-```sh
-devasc@labvm:~/labs/devnet-src/security$ curl -k -X POST -F 'username=dave' -F 'password=differentpassword' 'https://0.0.0.0:5000/signup/v2'
 signup successdevasc@labvm:~/labs/devnet-src/security$
-```
+
 - d.	Use curl commands to verify the login of all three users with their hash-stored passwords. The user allan is entered in twice, the first time with the wrong password. Notice the "Invalid username/password" that coincides with the code for this function that you added in a previous step. 
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ curl -k -X POST -F 'username=rick' -F 'password=samepassword' 'https://0.0.0.0:5000/login/v2'
-login successdevasc@labvm:~/labs/devnet-src/security$
+curl -k -X POST -F 'username=rick' -F 'password=samepassword' 'https://0.0.0.0:5000/login/v2'
 ```
+login successdevasc@labvm:~/labs/devnet-src/security$
+
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ curl -k -X POST -F 'username=allan' -F 'password=wrongpassword' 'https://0.0.0.0:5000/login/v2'
+curl -k -X POST -F 'username=allan' -F 'password=wrongpassword' 'https://0.0.0.0:5000/login/v2'
+```
 Invalid username/passworddevasc@labvm:~/labs/devnet-src/security$
-```
+
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ curl -k -X POST -F 'username=allan' -F 'password=samepassword' 'https://0.0.0.0:5000/login/v2'
-login successdevasc@labvm:~/labs/devnet-src/security$
+curl -k -X POST -F 'username=allan' -F 'password=samepassword' 'https://0.0.0.0:5000/login/v2'
 ```
+login successdevasc@labvm:~/labs/devnet-src/security$
+
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ curl -k -X POST -F 'username=dave' -F 'password=differentpassword' 'https://0.0.0.0:5000/login/v2'
-login successdevasc@labvm:~/labs/devnet-src/security$
+curl -k -X POST -F 'username=dave' -F 'password=differentpassword' 'https://0.0.0.0:5000/login/v2'
 ```
+login successdevasc@labvm:~/labs/devnet-src/security$
+
 This confirms that the hashed password is safely stored, and the passwords of users are protected should they become compromised.
 - e.	Terminate the server.
 ```sh
-devasc@labvm:~/labs/devnet-src/security$ pkill -f password-evolution.py
+pkill -f password-evolution.py
+```
 [1]+  Terminated              nohup python3 password-evolution.py
 devasc@labvm:~/labs/devnet-src/security$
-```
 
 ##### Step 4: Verify the contents of test.db.
 - a.	Open the DB Browser for SQLite application.
